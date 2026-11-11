@@ -1,0 +1,414 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>J.A.R.V.I.S. Voice Companion</title>
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #06121e;
+  --cyan: #61eaff;
+  --panel: #0a2838;
+  --line: #1b526d;
+  --text: #e7faff;
+  --muted: #a3c1cd;
+}
+* { box-sizing: border-box; }
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: radial-gradient(circle at 50% 35%, #134560, #06121e 65%);
+  color: var(--text);
+  margin: 0;
+  padding: 22px;
+  min-height: 100vh;
+  text-align: center;
+}
+.top {
+  color: var(--cyan);
+  letter-spacing: 3px;
+  font-size: 11px;
+  font-weight: 700;
+}
+h1 { font-size: 26px; margin: 14px 0 5px; }
+.subtitle { color: var(--muted); font-size: 13px; }
+.orb {
+  width: 160px;
+  height: 160px;
+  margin: 28px auto;
+  border: 2px dotted var(--cyan);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  position: relative;
+  box-shadow: 0 0 35px #16b8e52a;
+}
+.orb::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 3px solid transparent;
+  border-top-color: #4596ff;
+  border-bottom-color: var(--cyan);
+  border-radius: 50%;
+  animation: spin 10s linear infinite;
+}
+.orb.listening::before { animation-duration: 1.5s; }
+.core {
+  width: 110px;
+  height: 110px;
+  background: #0b2d42;
+  border: 1px solid var(--cyan);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: var(--cyan);
+}
+button, select, textarea { font: inherit; }
+button {
+  border-radius: 12px;
+  border: 1px solid var(--cyan);
+  background: #11445c;
+  color: #dcfcff;
+  padding: 12px 17px;
+  font-weight: 700;
+  cursor: pointer;
+}
+button.secondary {
+  background: #0a2333;
+  border-color: #42677a;
+}
+button:disabled { opacity: .5; cursor: default; }
+.actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+}
+.status {
+  min-height: 45px;
+  color: var(--cyan);
+  font-size: 13px;
+  margin: 15px auto;
+  max-width: 440px;
+}
+select {
+  background: #091e2d;
+  border: 1px solid #325c71;
+  color: white;
+  padding: 9px;
+  border-radius: 9px;
+}
+textarea {
+  width: 100%;
+  min-height: 90px;
+  margin-top: 20px;
+  padding: 13px;
+  background: #051824;
+  color: white;
+  border: 1px solid #2a5368;
+  border-radius: 12px;
+  resize: vertical;
+}
+footer {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+  margin: 24px auto;
+  max-width: 450px;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .orb::before { animation: none; }
+}
+</style>
+</head>
+
+<body>
+<div class="top">PERSONAL INTELLIGENCE INTERFACE</div>
+<h1>J.A.R.V.I.S. VOICE</h1>
+<div class="subtitle">Voice Companion / Gemini Assistant</div>
+
+<div class="orb" id="orb">
+  <div class="core">LISTEN</div>
+</div>
+
+<div id="status" class="status" role="status">
+  Connecting to J.A.R.V.I.S...
+</div>
+
+<label for="lang">Language:</label>
+<select id="lang">
+  <option value="ca-ES">Català</option>
+  <option value="en-US">English</option>
+  <option value="es-ES">Español</option>
+</select>
+
+<div class="actions">
+  <button id="listen" type="button">Start microphone</button>
+  <button id="stop" type="button" class="secondary" disabled>Stop</button>
+</div>
+
+<textarea id="transcript"
+  placeholder="Your speech will appear here. You can edit it before sending.">
+</textarea>
+
+<div class="actions">
+  <button id="send" type="button">Send to J.A.R.V.I.S.</button>
+  <button id="copy" type="button" class="secondary">Copy text</button>
+</div>
+
+<footer>
+  Speech recognition may be processed by your browser's
+  speech service. Do not dictate confidential student data.
+  No Gemini API key is stored on this page.
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  var params = new URLSearchParams(
+    location.hash.replace(/^#/, '')
+  );
+
+  var session = params.get('session') || '';
+  var lang = params.get('lang') || 'ca-ES';
+
+  var connected = false;
+  var listening = false;
+  var recognition = null;
+  var received = false;
+  var parentOrigin = null;
+
+  var status = document.getElementById('status');
+  var textbox = document.getElementById('transcript');
+  var listen = document.getElementById('listen');
+  var stop = document.getElementById('stop');
+  var orb = document.getElementById('orb');
+  var langSelect = document.getElementById('lang');
+
+  langSelect.value =
+    ['ca-ES','en-US','es-ES'].indexOf(lang) >= 0
+      ? lang : 'ca-ES';
+
+  function note(text) {
+    status.textContent = text;
+  }
+
+  function setActive(active) {
+    listening = active;
+    orb.classList.toggle('listening', active);
+    listen.disabled = active;
+    stop.disabled = !active;
+  }
+
+  function sendToParent(type, payload) {
+    if (!connected || !parentOrigin || !window.opener) {
+      return false;
+    }
+
+    var data = {
+      type: type,
+      session: session
+    };
+
+    Object.keys(payload || {}).forEach(function (key) {
+      data[key] = payload[key];
+    });
+
+    window.opener.postMessage(data, parentOrigin);
+    return true;
+  }
+
+  function tryHandshake() {
+    if (!window.opener || !session) {
+      note('Open this window from J.A.R.V.I.S.');
+      return;
+    }
+
+    if (!connected) {
+      window.opener.postMessage({
+        type: 'jarvis-voice-ready',
+        session: session
+      }, '*');
+    }
+  }
+
+  window.addEventListener('message', function (event) {
+    if (
+      event.source !== window.opener ||
+      !event.data ||
+      event.data.session !== session
+    ) {
+      return;
+    }
+
+    if (event.data.type === 'jarvis-voice-received') {
+      note('Message delivered to J.A.R.V.I.S.');
+      setTimeout(function () {
+        window.close();
+      }, 850);
+      return;
+    }
+
+    if (event.data.type !== 'jarvis-voice-ack') {
+      return;
+    }
+
+    parentOrigin = event.origin;
+    connected = true;
+
+    note('Connected. Press Start microphone to speak.');
+  });
+
+  tryHandshake();
+
+  var attempts = 0;
+
+  var ping = setInterval(function () {
+    if (connected) {
+      clearInterval(ping);
+      return;
+    }
+
+    if (++attempts > 15) {
+      clearInterval(ping);
+      note('Connection timeout. You can still copy the text.');
+      return;
+    }
+
+    tryHandshake();
+  }, 500);
+
+  function startMic() {
+    var SpeechAPI =
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition;
+
+    if (!SpeechAPI) {
+      note('Speech recognition unavailable. Try Chrome.');
+      return;
+    }
+
+    if (recognition && listening) return;
+
+    recognition = new SpeechAPI();
+    recognition.lang = langSelect.value;
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+
+    received = false;
+
+    recognition.onstart = function () {
+      setActive(true);
+      note('Listening... Speak normally.');
+    };
+
+    recognition.onresult = function (event) {
+      var words = [];
+      var allFinal = true;
+
+      for (var i = 0; i < event.results.length; i++) {
+        words.push(event.results[i][0].transcript);
+
+        if (!event.results[i].isFinal) {
+          allFinal = false;
+        }
+      }
+
+      textbox.value = words.join(' ').trim();
+
+      if (allFinal && textbox.value) {
+        received = true;
+        note('Recognised. Press Send to J.A.R.V.I.S.');
+      }
+    };
+
+    recognition.onerror = function (event) {
+      note('Microphone error: ' + event.error);
+    };
+
+    recognition.onend = function () {
+      setActive(false);
+      if (!received) {
+        note('Stopped. Send or edit the transcribed text.');
+      }
+    };
+
+    try {
+      recognition.start();
+    } catch (error) {
+      setActive(false);
+      note('Could not start: ' + error.message);
+    }
+  }
+
+  function stopMic() {
+    if (recognition && listening) {
+      try {
+        recognition.stop();
+      } catch (error) {}
+    }
+  }
+
+  function transmit() {
+    stopMic();
+
+    var text = String(textbox.value || '')
+      .trim()
+      .slice(0, 3000);
+
+    if (!text) {
+      note('Speak first or type a message.');
+      return;
+    }
+
+    if (sendToParent('jarvis-voice-transcript', {
+      text: text
+    })) {
+      note('Sending to J.A.R.V.I.S...');
+    } else {
+      note('Not connected. Use Copy text as a fallback.');
+    }
+  }
+
+  listen.addEventListener('click', startMic);
+  stop.addEventListener('click', stopMic);
+  send.addEventListener('click', transmit);
+
+  document.getElementById('copy').addEventListener(
+    'click',
+    function () {
+      var text = textbox.value;
+      if (!text) return;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(
+          function () {
+            note('Copied. Paste into J.A.R.V.I.S.');
+          },
+          function () {
+            textbox.focus();
+            textbox.select();
+            note('Press Cmd+C to copy.');
+          }
+        );
+      } else {
+        textbox.focus();
+        textbox.select();
+        note('Press Cmd+C to copy.');
+      }
+    }
+  );
+})();
+</script>
+</body>
+</html>
