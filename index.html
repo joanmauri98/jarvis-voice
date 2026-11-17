@@ -1,139 +1,139 @@
-
+<CodeBlock language="html" editable>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>J.A.R.V.I.S. Voice 2.10</title>
+<title>J.A.R.V.I.S. Voice Companion 2.10</title>
 <style>
 :root {
-  color-scheme: dark;
-  --bg: #06121e;
-  --cyan: #61eaff;
-  --panel: #0a2838;
-  --line: #1b526d;
-  --text: #e7faff;
-  --muted: #a3c1cd;
+  color-scheme:dark;
+  --bg:#06121e;
+  --cyan:#61eaff;
+  --panel:#0a2838;
+  --line:#1b526d;
+  --text:#e7faff;
+  --muted:#a3c1cd;
 }
-* { box-sizing: border-box; }
+* {box-sizing:border-box}
 body {
-  font-family: system-ui, -apple-system, sans-serif;
-  background: radial-gradient(circle at 50% 35%, #134560, #06121e 65%);
-  color: var(--text);
-  margin: 0;
-  padding: 22px;
-  min-height: 100vh;
-  text-align: center;
+  margin:0;
+  min-height:100vh;
+  padding:22px;
+  background:radial-gradient(circle at 50% 35%,#134560,#06121e 65%);
+  color:var(--text);
+  font-family:system-ui,-apple-system,sans-serif;
+  text-align:center;
 }
 .top {
-  color: var(--cyan);
-  letter-spacing: 3px;
-  font-size: 11px;
-  font-weight: 700;
+  color:var(--cyan);
+  letter-spacing:3px;
+  font-size:11px;
+  font-weight:700;
 }
-h1 { font-size: 26px; margin: 14px 0 5px; }
-.subtitle { color: var(--muted); font-size: 13px; }
+h1 {font-size:26px;margin:14px 0 5px}
+.subtitle {color:var(--muted);font-size:13px}
 .orb {
-  width: 160px;
-  height: 160px;
-  margin: 28px auto;
-  border: 2px dotted var(--cyan);
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  position: relative;
-  box-shadow: 0 0 35px #16b8e52a;
+  width:160px;
+  height:160px;
+  border:2px dotted var(--cyan);
+  border-radius:50%;
+  margin:28px auto;
+  display:grid;
+  place-items:center;
+  position:relative;
 }
 .orb::before {
-  content: "";
-  position: absolute;
-  inset: 12px;
-  border: 3px solid transparent;
-  border-top-color: #4596ff;
-  border-bottom-color: var(--cyan);
-  border-radius: 50%;
-  animation: spin 10s linear infinite;
+  content:"";
+  position:absolute;
+  inset:12px;
+  border:3px solid transparent;
+  border-top-color:#4596ff;
+  border-bottom-color:var(--cyan);
+  border-radius:50%;
+  animation:spin 10s linear infinite;
 }
-.orb.listening::before { animation-duration: 1.5s; }
+.orb.listening::before {animation-duration:1.5s}
 .core {
-  width: 110px;
-  height: 110px;
-  background: #0b2d42;
-  border: 1px solid var(--cyan);
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-weight: bold;
-  letter-spacing: 2px;
-  color: var(--cyan);
+  width:110px;
+  height:110px;
+  background:#0b2d42;
+  border:1px solid var(--cyan);
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-weight:bold;
+  letter-spacing:2px;
+  color:var(--cyan);
 }
-button, select, textarea { font: inherit; }
+button,select,textarea {font:inherit}
 button {
-  border-radius: 12px;
-  border: 1px solid var(--cyan);
-  background: #11445c;
-  color: #dcfcff;
-  padding: 12px 17px;
-  font-weight: 700;
-  cursor: pointer;
+  border-radius:12px;
+  border:1px solid var(--cyan);
+  background:#11445c;
+  color:#dcfcff;
+  padding:12px 17px;
+  font-weight:700;
+  cursor:pointer;
 }
 button.secondary {
-  background: #0a2333;
-  border-color: #42677a;
+  background:#0a2333;
+  border-color:#42677a;
 }
-button:disabled { opacity: .5; cursor: default; }
+button:disabled {opacity:.5;cursor:default}
 .actions {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 15px;
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:15px;
 }
 .status {
-  min-height: 45px;
-  color: var(--cyan);
-  font-size: 13px;
-  margin: 15px auto;
-  max-width: 440px;
+  min-height:45px;
+  color:var(--cyan);
+  font-size:13px;
+  margin:15px auto;
+  max-width:440px;
 }
 select {
-  background: #091e2d;
-  border: 1px solid #325c71;
-  color: white;
-  padding: 9px;
-  border-radius: 9px;
+  background:#091e2d;
+  border:1px solid #325c71;
+  color:white;
+  padding:9px;
+  border-radius:9px;
 }
 textarea {
-  width: 100%;
-  min-height: 90px;
-  margin-top: 20px;
-  padding: 13px;
-  background: #051824;
-  color: white;
-  border: 1px solid #2a5368;
-  border-radius: 12px;
-  resize: vertical;
+  width:100%;
+  min-height:90px;
+  margin-top:20px;
+  padding:13px;
+  background:#051824;
+  color:white;
+  border:1px solid #2a5368;
+  border-radius:12px;
+  resize:vertical;
 }
 footer {
-  color: var(--muted);
-  font-size: 11px;
-  line-height: 1.6;
-  margin: 24px auto;
-  max-width: 450px;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.6;
+  margin:24px auto;
+  max-width:450px;
 }
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {transform:rotate(360deg)}
 }
-@media (prefers-reduced-motion: reduce) {
-  .orb::before { animation: none; }
+@media(prefers-reduced-motion:reduce) {
+  .orb::before {animation:none}
 }
 </style>
 </head>
-
 <body>
+
+
 <div class="top">PERSONAL INTELLIGENCE INTERFACE</div>
-<h1>J.A.R.V.I.S. VOICE 2.10</h1>
-<div class="subtitle">Voice Companion / Gemini Assistant</div>
+<h1>J.A.R.V.I.S. VOICE</h1>
+<div class="subtitle">Voice Companion 2.10</div>
 
 <div class="orb" id="orb">
   <div class="core">LISTEN</div>
@@ -151,8 +151,13 @@ footer {
 </select>
 
 <div class="actions">
-  <button id="listen" type="button">Start microphone</button>
-  <button id="stop" type="button" class="secondary" disabled>Stop</button>
+  <button id="listen" type="button">
+    Start microphone
+  </button>
+  <button id="stop" type="button"
+    class="secondary" disabled>
+    Stop
+  </button>
 </div>
 
 <textarea id="transcript"
@@ -160,8 +165,12 @@ footer {
 </textarea>
 
 <div class="actions">
-  <button id="send" type="button">Send / Open app</button>
-  <button id="copy" type="button" class="secondary">Copy text</button>
+  <button id="send" type="button">
+    Send / Open app
+  </button>
+  <button id="copy" type="button" class="secondary">
+    Copy text
+  </button>
 </div>
 
 <footer>
@@ -172,276 +181,351 @@ footer {
 
 <script>
 (function () {
-  'use strict';
+'use strict';
 
-  var params = new URLSearchParams(
-    location.hash.replace(/^#/, '')
+var DESTINATIONS = {
+gmail:'https://mail.google.com/',
+drive:'https://drive.google.com/',
+calendar:'https://calendar.google.com/',
+classroom:'https://classroom.google.com/',
+toddle:'https://web.toddleapp.com/platform/188399222574294573/courses',
+googletasks:'https://tasks.google.com/'
+};
+
+var params = new URLSearchParams(
+  location.hash.replace(/^#/,'')
+);
+
+var session = params.get('session') || '';
+var selectedLanguage = params.get('lang') || 'ca-ES';
+
+var connected = false;
+var listening = false;
+var recognition = null;
+var received = false;
+var parentOrigin = null;
+
+var status = document.getElementById('status');
+var textbox = document.getElementById('transcript');
+var listen = document.getElementById('listen');
+var stop = document.getElementById('stop');
+var orb = document.getElementById('orb');
+var langSelect = document.getElementById('lang');
+
+langSelect.value =
+  ['ca-ES','en-US','es-ES'].indexOf(selectedLanguage) >= 0
+  ? selectedLanguage
+  : 'ca-ES';
+
+function note(text) {
+  status.textContent = text;
+}
+
+function setActive(active) {
+  listening = active;
+  orb.classList.toggle('listening',active);
+  listen.disabled = active;
+  stop.disabled = !active;
+}
+
+function normalize(text) {
+  return String(text || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g,'')
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g,' ')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+
+function command(text) {
+  var s = normalize(text);
+
+s = s.replace(
+    /^(?:(?:hey|hola|ei)\s+)?jarvis\s+/,
+    ''
   );
 
-  var session = params.get('session') || '';
-  var lang = params.get('lang') || 'ca-ES';
+  var original = s;
 
-  var connected = false;
-  var listening = false;
-  var recognition = null;
-  var received = false;
-  var parentOrigin = null;
+s = s.replace(
+    /^(?:open|launch|go to|show(?: me)?|take me to|obre|obrir|ves(?: a)?|mostra|entra(?: a)?)\s+/,
+    ''
+  );
 
-  var status = document.getElementById('status');
-  var textbox = document.getElementById('transcript');
-  var listen = document.getElementById('listen');
-  var stop = document.getElementById('stop');
-  var orb = document.getElementById('orb');
-  var langSelect = document.getElementById('lang');
+  if (s === original) return '';
 
-  langSelect.value =
-    ['ca-ES','en-US','es-ES'].indexOf(lang) >= 0
-      ? lang : 'ca-ES';
+s = s.replace(
+    /\s+(?:please|si us plau|por favor)$/,
+    ''
+  );
 
-  function note(text) {
-    status.textContent = text;
-  }
+s = s.replace(
+    /^(?:(?:el|la|els|les|the|my|to|al|a)\s+)+/,
+    ''
+  );
 
-  function setActive(active) {
-    listening = active;
-    orb.classList.toggle('listening', active);
-    listen.disabled = active;
-    stop.disabled = !active;
-  }
+var aliases = {
+    gmail:[
+      'gmail','g mail','email',
+      'correu','correu electronic','mail'
+    ],
+    drive:['drive','google drive'],
+    calendar:[
+      'calendar','google calendar',
+      'calendari','agenda'
+    ],
+    classroom:['classroom','google classroom'],
+    toddle:['toddle'],
+    googletasks:['google tasks','tasques de google']
+  };
 
-  function sendToParent(type, payload) {
-    if (!connected || !parentOrigin || !window.opener) {
-      return false;
-    }
-
-    var data = {
-      type: type,
-      session: session
-    };
-
-    Object.keys(payload || {}).forEach(function (key) {
-      data[key] = payload[key];
-    });
-
-    window.opener.postMessage(data, parentOrigin);
-    return true;
-  }
-
-  function tryHandshake() {
-    if (!window.opener || !session) {
-      note('Open this window from J.A.R.V.I.S.');
-      return;
-    }
-
-    if (!connected) {
-      window.opener.postMessage({
-        type: 'jarvis-voice-ready',
-        session: session
-      }, '*');
-    }
-  }
-
-  window.addEventListener('message', function (event) {
+for (var key in aliases) {
     if (
-      event.source !== window.opener ||
-      !event.data ||
-      event.data.session !== session
+      Object.prototype.hasOwnProperty.call(aliases,key) &&
+      aliases[key].indexOf(s) >= 0
     ) {
-      return;
+      return key;
     }
+  }
 
-    if (event.data.type === 'jarvis-voice-received') {
-      if (destinations[command(textbox.value)]) return;
-      note('Message delivered to J.A.R.V.I.S.');
-      setTimeout(function () {
-        window.close();
-      }, 850);
-      return;
-    }
+return '';
+}
 
-    if (event.data.type !== 'jarvis-voice-ack') {
-      return;
-    }
+function sendToParent(type,payload) {
+  if (!connected || !parentOrigin || !window.opener) {
+    return false;
+  }
 
-    parentOrigin = event.origin;
-    connected = true;
+var data = {
+    type:type,
+    session:session
+  };
 
-    note('Connected. Press Start microphone to speak.');
+Object.keys(payload || {}).forEach(function(key) {
+    data[key] = payload[key];
   });
 
-  tryHandshake();
+window.opener.postMessage(data,parentOrigin);
+  return true;
+}
 
-  var attempts = 0;
-
-  var ping = setInterval(function () {
-    if (connected) {
-      clearInterval(ping);
-      return;
-    }
-
-    if (++attempts > 15) {
-      clearInterval(ping);
-      note('Connection timeout. You can still copy the text.');
-      return;
-    }
-
-    tryHandshake();
-  }, 500);
-
-  function startMic() {
-    var SpeechAPI =
-      window.SpeechRecognition ||
-      window.webkitSpeechRecognition;
-
-    if (!SpeechAPI) {
-      note('Speech recognition unavailable. Try Chrome.');
-      return;
-    }
-
-    if (recognition && listening) return;
-
-    recognition = new SpeechAPI();
-    recognition.lang = langSelect.value;
-    recognition.continuous = false;
-    recognition.interimResults = true;
-    recognition.maxAlternatives = 1;
-
-    received = false;
-
-    recognition.onstart = function () {
-      setActive(true);
-      note('Listening... Speak normally.');
-    };
-
-    recognition.onresult = function (event) {
-      var words = [];
-      var allFinal = true;
-
-      for (var i = 0; i < event.results.length; i++) {
-        words.push(event.results[i][0].transcript);
-
-        if (!event.results[i].isFinal) {
-          allFinal = false;
-        }
-      }
-
-      textbox.value = words.join(' ').trim();
-
-      if (allFinal && textbox.value) {
-        received = true;
-        note('Recognised. Press Send to J.A.R.V.I.S.');
-      }
-    };
-
-    recognition.onerror = function (event) {
-      note('Microphone error: ' + event.error);
-    };
-
-    recognition.onend = function () {
-      setActive(false);
-      if (!received) {
-        note('Stopped. Send or edit the transcribed text.');
-      }
-    };
-
-    try {
-      recognition.start();
-    } catch (error) {
-      setActive(false);
-      note('Could not start: ' + error.message);
-    }
+function tryHandshake() {
+  if (!window.opener || !session) {
+    note('Open this window from J.A.R.V.I.S.');
+    return;
   }
 
-  function stopMic() {
-    if (recognition && listening) {
-      try {
-        recognition.stop();
-      } catch (error) {}
-    }
+if (!connected) {
+    window.opener.postMessage({
+      type:'jarvis-voice-ready',
+      session:session
+    },'*');
+  }
+}
+
+window.addEventListener('message',function(event) {
+  if (
+    event.source !== window.opener ||
+    !event.data ||
+    event.data.session !== session
+  ) {
+    return;
   }
 
+if (event.data.type === 'jarvis-voice-received') {
+    var destination = DESTINATIONS[command(textbox.value)];
 
-  // Approved destinations only. No user-provided arbitrary URL is opened.
-  var destinations = {
-    gmail: "https://mail.google.com/",
-    drive: "https://drive.google.com/",
-    calendar: "https://calendar.google.com/",
-    classroom: "https://classroom.google.com/",
-    toddle: "https://web.toddleapp.com/platform/188399222574294573/courses",
-    googletasks: "https://tasks.google.com/"
+if (destination) {
+      return;
+    }
+
+    note('Message delivered to J.A.R.V.I.S.');
+
+setTimeout(function() {
+      window.close();
+    },850);
+
+return;
+  }
+
+if (event.data.type !== 'jarvis-voice-ack') {
+    return;
+  }
+
+parentOrigin = event.origin;
+  connected = true;
+
+note('Connected. Press Start microphone to speak.');
+});
+
+tryHandshake();
+
+var attempts = 0;
+
+var ping = setInterval(function() {
+  if (connected) {
+    clearInterval(ping);
+    return;
+  }
+
+if (++attempts > 15) {
+    clearInterval(ping);
+    note('Connection timeout. You can still copy the text.');
+    return;
+  }
+
+tryHandshake();
+},500);
+
+function startMic() {
+  var SpeechAPI =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+if (!SpeechAPI) {
+    note('Speech recognition unavailable. Try Chrome.');
+    return;
+  }
+
+  if (recognition && listening) return;
+
+  recognition = new SpeechAPI();
+
+recognition.lang = langSelect.value;
+  recognition.continuous = false;
+  recognition.interimResults = true;
+  recognition.maxAlternatives = 1;
+
+  received = false;
+
+recognition.onstart = function() {
+    setActive(true);
+    note('Listening... Speak normally.');
   };
-  function command(text) {
-    var s=String(text||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-      .toLowerCase().replace(/[^a-z0-9\s-]/g," ").replace(/\s+/g," ").trim();
-    s=s.replace(/^(?:(?:hey|hola|ei)\s+)?jarvis\s+/,"");
-    var before=s;
-    s=s.replace(/^(?:open|launch|go to|show(?: me)?|take me to|obre|obrir|ves(?: a)?|mostra|entra(?: a)?)\s+/,"");
-    if(s===before)return "";
-    s=s.replace(/\s+(?:please|si us plau|por favor)$/,"");
-    s=s.replace(/^(?:(?:el|la|els|les|the|my|to|al|a)\s+)+/,"");
-    var aliases={
-      gmail:["gmail","g mail","email","correu","correu electronic","mail"],
-      drive:["drive","google drive"],
-      calendar:["calendar","google calendar","calendari","agenda"],
-      classroom:["classroom","google classroom","classes"],
-      toddle:["toddle"],
-      googletasks:["google tasks","tasques de google"]
-    };
-    for(var key in aliases) if(aliases[key].indexOf(s)!==-1) return key;
-    return "";
-  }
-  function transmit() {
-    stopMic();
-    var text=String(textbox.value||"").trim().slice(0,3000);
-    if(!text){note("Parla o escriu una ordre.");return;}
-    var key=command(text);
-    var url=key && destinations[key];
-    if(url) {
-      // Inform the dashboard before leaving this companion window.
-      // The existing window is navigated, not a new blocked popup.
-      sendToParent("jarvis-voice-transcript",{
-        text:text,navKey:key,openedByCompanion:true
-      });
-      note("Obrint "+key+" en aquesta finestra...");
-      setTimeout(function(){window.location.assign(url);},200);
-      return;
-    }
-    if(sendToParent("jarvis-voice-transcript", {text:text})) {
-      note("Enviant a J.A.R.V.I.S...");
-    } else {
-      note("No connectat. Pots copiar el text.");
-    }
-  }
 
-  listen.addEventListener('click', startMic);
-  stop.addEventListener('click', stopMic);
-  send.addEventListener('click', transmit);
+recognition.onresult = function(event) {
+    var words = [];
+    var allFinal = true;
 
-  document.getElementById('copy').addEventListener(
-    'click',
-    function () {
-      var text = textbox.value;
-      if (!text) return;
+for (var i = 0; i < event.results.length; i++) {
+      words.push(event.results[i][0].transcript);
 
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(
-          function () {
-            note('Copied. Paste into J.A.R.V.I.S.');
-          },
-          function () {
-            textbox.focus();
-            textbox.select();
-            note('Press Cmd+C to copy.');
-          }
-        );
-      } else {
-        textbox.focus();
-        textbox.select();
-        note('Press Cmd+C to copy.');
+if (!event.results[i].isFinal) {
+        allFinal = false;
       }
     }
-  );
+
+    textbox.value = words.join(' ').trim();
+
+if (allFinal && textbox.value) {
+      received = true;
+      note('Recognised. Press Send / Open app.');
+    }
+  };
+
+recognition.onerror = function(event) {
+    note('Microphone error: ' + event.error);
+  };
+
+recognition.onend = function() {
+    setActive(false);
+
+if (!received) {
+      note('Stopped. Send or edit the transcribed text.');
+    }
+  };
+
+try {
+    recognition.start();
+  } catch(error) {
+    setActive(false);
+    note('Could not start: ' + error.message);
+  }
+}
+
+function stopMic() {
+  if (recognition && listening) {
+    try {
+      recognition.stop();
+    } catch(error) {}
+  }
+}
+
+function transmit() {
+  stopMic();
+
+var text = String(textbox.value || '')
+    .trim()
+    .slice(0,3000);
+
+if (!text) {
+    note('Speak first or type a message.');
+    return;
+  }
+
+var key = command(text);
+  var destination = key && DESTINATIONS[key];
+
+if (destination) {
+    sendToParent('jarvis-voice-transcript',{
+      text:text,
+      navKey:key,
+      openedByCompanion:true
+    });
+
+    note('Opening ' + key + '...');
+
+// Reuse this window instead of opening a popup.
+    setTimeout(function() {
+      window.location.assign(destination);
+    },200);
+
+return;
+  }
+
+if (sendToParent('jarvis-voice-transcript',{
+    text:text,
+    navKey:key || '',
+    openedByCompanion:false
+  })) {
+    note('Sending to J.A.R.V.I.S...');
+  } else {
+    note('Not connected. Use Copy text as a fallback.');
+  }
+}
+
+listen.addEventListener('click',startMic);
+stop.addEventListener('click',stopMic);
+document.getElementById('send')
+  .addEventListener('click',transmit);
+
+document.getElementById('copy')
+  .addEventListener('click',function() {
+    var text = textbox.value;
+    if (!text) return;
+
+if (navigator.clipboard &&
+        navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(
+        function() {
+          note('Copied. Paste into J.A.R.V.I.S.');
+        },
+        function() {
+          textbox.focus();
+          textbox.select();
+          note('Press Cmd+C to copy.');
+        }
+      );
+    } else {
+      textbox.focus();
+      textbox.select();
+      note('Press Cmd+C to copy.');
+    }
+  });
+
 })();
 </script>
 </body>
 </html>
+</CodeBlock>
