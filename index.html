@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>J.A.R.V.I.S. Voice Companion</title>
+<title>J.A.R.V.I.S. Voice 2.10</title>
 <style>
 :root {
   color-scheme: dark;
@@ -132,7 +132,7 @@ footer {
 
 <body>
 <div class="top">PERSONAL INTELLIGENCE INTERFACE</div>
-<h1>J.A.R.V.I.S. VOICE</h1>
+<h1>J.A.R.V.I.S. VOICE 2.10</h1>
 <div class="subtitle">Voice Companion / Gemini Assistant</div>
 
 <div class="orb" id="orb">
@@ -160,7 +160,7 @@ footer {
 </textarea>
 
 <div class="actions">
-  <button id="send" type="button">Send to J.A.R.V.I.S.</button>
+  <button id="send" type="button">Send / Open app</button>
   <button id="copy" type="button" class="secondary">Copy text</button>
 </div>
 
@@ -251,6 +251,7 @@ footer {
     }
 
     if (event.data.type === 'jarvis-voice-received') {
+      if (destinations[command(textbox.value)]) return;
       note('Message delivered to J.A.R.V.I.S.');
       setTimeout(function () {
         window.close();
@@ -359,24 +360,56 @@ footer {
     }
   }
 
+
+  // Approved destinations only. No user-provided arbitrary URL is opened.
+  var destinations = {
+    gmail: "https://mail.google.com/",
+    drive: "https://drive.google.com/",
+    calendar: "https://calendar.google.com/",
+    classroom: "https://classroom.google.com/",
+    toddle: "https://web.toddleapp.com/platform/188399222574294573/courses",
+    googletasks: "https://tasks.google.com/"
+  };
+  function command(text) {
+    var s=String(text||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+      .toLowerCase().replace(/[^a-z0-9\s-]/g," ").replace(/\s+/g," ").trim();
+    s=s.replace(/^(?:(?:hey|hola|ei)\s+)?jarvis\s+/,"");
+    var before=s;
+    s=s.replace(/^(?:open|launch|go to|show(?: me)?|take me to|obre|obrir|ves(?: a)?|mostra|entra(?: a)?)\s+/,"");
+    if(s===before)return "";
+    s=s.replace(/\s+(?:please|si us plau|por favor)$/,"");
+    s=s.replace(/^(?:(?:el|la|els|les|the|my|to|al|a)\s+)+/,"");
+    var aliases={
+      gmail:["gmail","g mail","email","correu","correu electronic","mail"],
+      drive:["drive","google drive"],
+      calendar:["calendar","google calendar","calendari","agenda"],
+      classroom:["classroom","google classroom","classes"],
+      toddle:["toddle"],
+      googletasks:["google tasks","tasques de google"]
+    };
+    for(var key in aliases) if(aliases[key].indexOf(s)!==-1) return key;
+    return "";
+  }
   function transmit() {
     stopMic();
-
-    var text = String(textbox.value || '')
-      .trim()
-      .slice(0, 3000);
-
-    if (!text) {
-      note('Speak first or type a message.');
+    var text=String(textbox.value||"").trim().slice(0,3000);
+    if(!text){note("Parla o escriu una ordre.");return;}
+    var key=command(text);
+    var url=key && destinations[key];
+    if(url) {
+      // Inform the dashboard before leaving this companion window.
+      // The existing window is navigated, not a new blocked popup.
+      sendToParent("jarvis-voice-transcript",{
+        text:text,navKey:key,openedByCompanion:true
+      });
+      note("Obrint "+key+" en aquesta finestra...");
+      setTimeout(function(){window.location.assign(url);},200);
       return;
     }
-
-    if (sendToParent('jarvis-voice-transcript', {
-      text: text
-    })) {
-      note('Sending to J.A.R.V.I.S...');
+    if(sendToParent("jarvis-voice-transcript", {text:text})) {
+      note("Enviant a J.A.R.V.I.S...");
     } else {
-      note('Not connected. Use Copy text as a fallback.');
+      note("No connectat. Pots copiar el text.");
     }
   }
 
